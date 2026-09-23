@@ -7,6 +7,8 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
+Route::apiResource('dogs', DogController::class)->middleware('auth:sanctum');
+
 Route::get('/sandbox', function (Request $request) {
     return "Hello API \n";
 });
