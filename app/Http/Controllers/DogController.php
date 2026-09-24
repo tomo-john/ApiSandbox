@@ -17,17 +17,17 @@ class DogController extends Controller
         //
     }
 
-    public function show(string $id)
+    public function show(Dog $dog)
+    {
+        return $dog;
+    }
+
+    public function update(Request $request, Dog $dog)
     {
         //
     }
 
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    public function destroy(string $id)
+    public function destroy(Dog $dog)
     {
         //
     }
