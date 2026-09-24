@@ -26,3 +26,36 @@ Route::apiResource('dogs', DogController::class);
 
 それぞれが、`DogController`の`index`, `show`, `store`, `update`, `destroy`という決まった名前のメソッドにも自動で紐づく。
 
+## Resource Controllers(今回は使用しない)
+
+一般的なCRUDで使用される例。
+
+ルーティング:
+
+```php
+<?php
+use App\Http\Controllers\DogController;
+
+Route::resource('dogs', DogController::class);
+```
+
+コントローラ作成:
+
+```bash
+php artisan make:controller DogController --resource
+```
+
+処理されるアクション:
+
+| HTTPメソッド | URI              | Action  | Route Name   |
+| ------------ | ---------------- | ------- | ------------ |
+| GET          | /dogs            | index   | dogs.index   |
+| GET          | /dogs/create     | create  | dogs.create  |
+| POST         | /dogs            | store   | dogs.store   |
+| GET          | /dogs/{dog}      | show    | dogs.show    |
+| GET          | /dogs/{dog}/edit | edit    | dogs.edit    |
+| PUT/PATCH    | /dogs/{dog}      | update  | dogs.update  |
+| DELETE       | /dogs/{dog}      | destroy | dogs.destroy |
+
+=> APIリソースルートではこれに、`create`と`edit`を除いたものと考える
+
