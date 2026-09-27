@@ -107,3 +107,44 @@ class DogPolicy
 
 - 参考URL: [公式ドキュメント](https://laravel.com/framework/docs/13.x/controllers#authorization-attributes)
 
+## 従来方式memo($this->authorize()を生やす)
+
+### use宣言
+
+コントローラ内で宣言:
+
+```php
+<?php
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+```
+
+### traitを使う
+
+クラス内で宣言したtraitを使う:
+
+```php
+<?php
+class DogController extends Controller
+{
+    use AuthorizesRequests;
+    ...
+```
+
+### $this->authorize()が使える:
+
+```php
+<?php
+    ...
+    public function show(Dog $dog)
+    {
+        $this->authorize('view', $dog);
+
+        return $dog;
+    }
+    ...
+```
+
+複数のControllerで、`$this->authorize(...)`を生やしたいなら共通の親Controllerで`use AuthorizesRequests;`する。
+
+=> traitを親Controllerに入れると、子Controllerでも使える
+
