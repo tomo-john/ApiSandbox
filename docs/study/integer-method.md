@@ -6,7 +6,7 @@
 
 | Laravelのメソッド | SQLの型(MySQL) | サイズ  | 符号なしの範囲                  |
 | ----------------- | -------------- | ------- | ------------------------------- |
-| `tinyInteger()`   | `TINYINT`      |  1 byte | 0 ～ 255                        |
+| `tinyInteger()`   | `TINYINT`      | 1 byte  | 0 ～ 255                        |
 | `smallInteger()`  | `SMALLINT`     | 2 bytes | 0 ～ 65,535                     |
 | `mediumInteger()` | `MEDIUMINT`    | 3 bytes | 0 ～ 16,777,215                 |
 | `integer()`       | `INT`          | 4 bytes | 0 ～ 4,294,967,295              |
