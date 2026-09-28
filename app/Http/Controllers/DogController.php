@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Dog;
 use App\Http\Requests\StoreDogRequest;
+use App\Http\Requests\UpdateDogRequest;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Routing\Attributes\Controllers\Authorize;
@@ -30,9 +31,13 @@ class DogController extends Controller
         return $dog;
     }
 
-    public function update(Request $request, Dog $dog)
+    public function update(UpdateDogRequest $request, Dog $dog)
     {
-        //
+        $validated = $request->validated();
+
+        $dog->update($validated);
+
+        return response()->json($dog);
     }
 
     public function destroy(Dog $dog)
