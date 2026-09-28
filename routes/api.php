@@ -11,5 +11,5 @@ Route::get('/user', function (Request $request) {
 Route::apiResource('dogs', DogController::class)->middleware('auth:sanctum');
 
 Route::get('/sandbox', function (Request $request) {
-    return "Hello API \n";
+    return response("私はティーポットです🐶\n", 418);
 });
