@@ -32,5 +32,8 @@ curl -i -H "Authorization: Bearer 1|bcSfSLmkUWv0JwZ70QHnFQc5moeFQF1O73jKtFDl7a4e
 # User1 (Update)
 curl -i -H "Authorization: Bearer 1|bcSfSLmkUWv0JwZ70QHnFQc5moeFQF1O73jKtFDl7a4e8d65" -H "Content-Type: application/json" -X PATCH \
   -d '{"weight":100}' http://localhost:8000/api/dogs/4
+
+# User1 (Delete)
+curl -i -H "Authorization: Bearer 1|bcSfSLmkUWv0JwZ70QHnFQc5moeFQF1O73jKtFDl7a4e8d65" -X DELETE http://localhost:8000/api/dogs/4
 ```
 

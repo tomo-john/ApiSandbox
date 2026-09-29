@@ -35,11 +35,11 @@ User (1) --- (多) Dog (1) --- (多) Walk
 
 `Dog`リソースCRUD APIまで:
 
-- [ ] Model・Migration: `dogs`テーブルの設計
-- [ ] Userとのリレーション定義: `hasMany`, `belongsTo`
-- [ ] Route定義・エンドポイント
-- [ ] Controller作成: ロジック実装
-- [ ] 認可ロジック
-- [ ] バリデーション
-- [ ] curlで一通りの動作確認
+- [x] Model・Migration: `dogs`テーブルの設計
+- [x] Userとのリレーション定義: `hasMany`, `belongsTo`
+- [x] Route定義・エンドポイント
+- [x] Controller作成: ロジック実装
+- [x] 認可ロジック
+- [x] バリデーション
+- [x] curlで一通りの動作確認
 
