@@ -40,8 +40,11 @@ class DogController extends Controller
         return response()->json($dog);
     }
 
+    #[Authorize('delete', 'dog')]
     public function destroy(Dog $dog)
     {
-        //
+        $dog->delete();
+
+        return response()->noContent();
     }
 }
