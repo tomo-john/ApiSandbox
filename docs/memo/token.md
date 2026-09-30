@@ -1,5 +1,7 @@
 # curlで使うtokenめも
 
+## token(User1, 2)
+
 User1:
 
 ```
@@ -18,6 +20,8 @@ curl:
 curl -i -H "Authorization: Bearer <token>" ...
 ```
 
+## Dog CRUD
+
 ```bash
 # User1 (Index)
 curl -i -H "Authorization: Bearer 1|bcSfSLmkUWv0JwZ70QHnFQc5moeFQF1O73jKtFDl7a4e8d65" http://localhost:8000/api/dogs
@@ -35,5 +39,14 @@ curl -i -H "Authorization: Bearer 1|bcSfSLmkUWv0JwZ70QHnFQc5moeFQF1O73jKtFDl7a4e
 
 # User1 (Delete)
 curl -i -H "Authorization: Bearer 1|bcSfSLmkUWv0JwZ70QHnFQc5moeFQF1O73jKtFDl7a4e8d65" -X DELETE http://localhost:8000/api/dogs/4
+```
+
+## Walk CRUD
+
+```bash
+curl -i -X POST -H "Authorization: Bearer 1|bcSfSLmkUWv0JwZ70QHnFQc5moeFQF1O73jKtFDl7a4e8d65" -H "Content-Type: application/json" \
+  -d '{"walked_at":"2026-09-30 13:00","duration_minutes":30,"distance_km":2.5}' http://localhost:8000/api/dogs/1/walks | head -30
+
+curl -i -H "Authorization: Bearer 1|bcSfSLmkUWv0JwZ70QHnFQc5moeFQF1O73jKtFDl7a4e8d65" http://localhost:8000/api/dogs/1/walks/1
 ```
 

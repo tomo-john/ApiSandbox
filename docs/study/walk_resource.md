@@ -138,3 +138,62 @@ php artisan make:request UpdateWalkRequest
 
 一般的な命名規則: 「アクション名 + 対象リソース名 + Request」
 
+## URLのdog_idとwalkの実際のdog_idのチェック
+
+- `dog_id = 1`の持つ`walk_id`は`1, 2, 3`
+- `dog_id = 2`の持つ`walk_id`は`4, 5, 6`
+
+のとき、例えば`show`: `GET /api/dogs/1/walks/4`のリクエストはどうなるのか？
+
+- ルーティングは`{dog}`に`1`、`{walk}`に`4`という2つの値を独立して受け取る
+- `show(Walk $walk)`は`$walk`しか引数に取っていないので、Laravelは`{dog}=1`という情報を一切使わない(受け取ってすらいない)
+- `$walk(id=4)`はルートモデルバインディングで正常に見つかる(存在するレコードなので)
+- `WalkPolicy@view`は`$walk->dog->user_id`(つまり`dog_id=2`のUser)を見て判定する
+
+=> もしログイン中のUserが`dog_id=2`の飼い主なら、`dogs/1/walks/4`という、本来存在しないはずのURLの組み合わせでも、`200 OK`で散歩記録が返ってきてしまう
+
+「そのUserの犬かどうか」は正しくチェックできているが、「URLの`dog_id`とwalkの実際の`dog_id`が一致しているか」は全くチェックされていない。
+
+本来は存在しないURLとして扱われるべきで、`404`を返すのが正しい振る舞い。
+
+これを解消するために、`scoped()`を使用する。
+
+ルーティング:
+
+```php
+<?php
+// こっちじゃなかった
+Route::apiResource('dogs.walks', WalkController::class)->middleware('auth:sanctum')->scopeBindings();
+
+// こっちでいけた
+Route::apiResource('dogs.walks', WalkController::class)->middleware('auth:sanctum')->scoped();
+```
+
+`scoped()`を付けたことで、Laravelは`{dog}`と`{walk}`という2つのプレースホルダーを、独立した値としてではなく、親子関係のあるものとして解決するようになる。
+
+内部的に`{walk}`を検索する際、`dog_id`が`{dog}`と一致するものを限定で探すという条件が自動的に追加される。
+
+これを使用するためには、前もってリレーションの定義をしておく必要がある。(`Dog`モデルの`walks()`リレーション)
+
+### 上記修正
+
+参考: [公式ドキュメントのここ](https://laravel.com/framework/docs/controllers#restful-scoping-resource-routes)
+
+`Route::resource()`および`Route::apiResource()`のようなリソースルートに対して、
+
+`scopeBindings()`ではなく、`scoped()`を使用するのが正しい。
+
+`scoped([...])`の中身について...ドキュメントの例では`'comment' => 'slug'`となっている。
+
+これは、`id`ではなく`slug`というカラムで検索してねというカスタムキーを指定する例。
+
+今回、`Walk`モデルには`id`以外の検索用カラム(`slug`のようなもの)は用意していない。
+
+本当の原因は、Controllerメソッドの引数に`Dog $dog`を含めていなかったこと。
+
+`scoped()`は「`{walk}`を解決する際に、`{dog}`という親のスコープに基づいて絞り込む」という仕組みである以上、
+
+Laravelが`{dog}`をどのモデルとして認識するかを決めるために、Controller側に`Dog $dog`という受け皿(型情報)が必要だった、と考えるのが自然。
+
+`$dog`を省いてしまうと、Laravelは「`{dog}`をどう解決すればいいか」の手がかりを失い、結果的に`{walk}`のスコープ解決も巻き添えでおかしくなっていた、という推測が今回の実地検証と矛盾しない。
+
