@@ -11,9 +11,11 @@ use Illuminate\Routing\Attributes\Controllers\Authorize;
 
 class DogController extends Controller
 {
-    public function index(Request $request): Collection
+    public function index(Request $request)
     {
-        return $request->user()->dogs()->get();
+        $per_page = $request->query('per_page', 5);
+
+        return $request->user()->dogs()->paginate($per_page);
     }
 
     public function store(StoreDogRequest $request)
