@@ -15,7 +15,17 @@ class DogController extends Controller
     {
         $per_page = $request->query('per_page', 5);
 
-        return $request->user()->dogs()->paginate($per_page);
+        $breed = $request->query('breed');
+
+        $dogs = $request->user()
+                        ->dogs()
+                        ->when($breed, function ($query, $breed) {
+                            $query->where('breed', $breed);
+                        })
+                        ->paginate($per_page)
+                        ->withQueryString();
+
+        return $dogs;
     }
 
     public function store(StoreDogRequest $request)
