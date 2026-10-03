@@ -17,10 +17,17 @@ class DogController extends Controller
 
         $breed = $request->query('breed');
 
+        $sort = $request->query('sort');
+
+        $order = $request->query('order', 'asc');
+
         $dogs = $request->user()
                         ->dogs()
                         ->when($breed, function ($query, $breed) {
                             $query->where('breed', $breed);
+                        })
+                        ->when($sort, function ($query, $sort) use ($order) {
+                            $query->orderBy($sort, $order);
                         })
                         ->paginate($per_page)
                         ->withQueryString();
