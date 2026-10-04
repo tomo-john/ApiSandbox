@@ -23,7 +23,10 @@ class IndexDogRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'per_page' => ['sometimes', 'integer', 'min:1','max:50'],
+            'breed' => ['sometimes', 'string', 'max:100'],
             'sort' => ['sometimes', 'in:name,breed,birthdate,weight'],
+            'order' => ['sometimes', 'in:asc,desc'],
         ];
     }
 }
