@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Dog;
+use App\Http\Requests\IndexDogRequest;
 use App\Http\Requests\StoreDogRequest;
 use App\Http\Requests\UpdateDogRequest;
 use Illuminate\Http\Request;
@@ -11,7 +12,7 @@ use Illuminate\Routing\Attributes\Controllers\Authorize;
 
 class DogController extends Controller
 {
-    public function index(Request $request)
+    public function index(IndexDogRequest $request)
     {
         $per_page = $request->query('per_page', 5);
 
