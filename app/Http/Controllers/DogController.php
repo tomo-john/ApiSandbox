@@ -6,6 +6,7 @@ use App\Models\Dog;
 use App\Http\Requests\IndexDogRequest;
 use App\Http\Requests\StoreDogRequest;
 use App\Http\Requests\UpdateDogRequest;
+use App\Http\Resources\DogResource;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Routing\Attributes\Controllers\Authorize;
@@ -33,7 +34,7 @@ class DogController extends Controller
                         ->paginate($per_page)
                         ->withQueryString();
 
-        return $dogs;
+        return DogResource::collection($dogs);
     }
 
     public function store(StoreDogRequest $request)
@@ -42,13 +43,13 @@ class DogController extends Controller
 
         $dog = $request->user()->dogs()->create($validated);
 
-        return response()->json($dog, 201);
+        return new DogResource($dog);
     }
 
     #[Authorize('view', 'dog')]
     public function show(Dog $dog)
     {
-        return $dog;
+        return new DogResource($dog);
     }
 
     public function update(UpdateDogRequest $request, Dog $dog)
@@ -57,7 +58,7 @@ class DogController extends Controller
 
         $dog->update($validated);
 
-        return response()->json($dog);
+        return new DogResource($dog);
     }
 
     #[Authorize('delete', 'dog')]
