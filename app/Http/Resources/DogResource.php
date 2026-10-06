@@ -18,7 +18,8 @@ class DogResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'breed' => $this->breed,
-            'birthdate' => $this->birthdate,
+            'birthdate' => $this->birthdate->format('Y-m-d'),
+            'age' => $this->age,
             'weight' => $this->weight,
         ];
     }
